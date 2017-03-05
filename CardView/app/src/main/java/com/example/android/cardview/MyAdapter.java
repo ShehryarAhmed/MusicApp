@@ -1,11 +1,11 @@
 package com.example.android.cardview;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.ImageHeaderParser;
-import com.bumptech.glide.load.resource.bitmap.ImageVideoBitmapDecoder;
 import com.example.android.cardview.model.AlbumDetail;
 
 import java.util.List;
@@ -26,7 +24,7 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private String[] mDataset;
     private Context mContext;
-    private List<AlbumDetail> list;
+    private List<AlbumDetail> albumDetailList;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
@@ -53,7 +51,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public MyAdapter(Context context, List<AlbumDetail> lists) {
         mContext = context;
-        list = lists;
+        albumDetailList = lists;
     }
 
     @Override
@@ -68,7 +66,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final MyAdapter.ViewHolder holder, int position) {
 
-        AlbumDetail albumDetail = list.get(position);
+        AlbumDetail albumDetail = albumDetailList.get(position);
         holder.mTitle.setText(albumDetail.getName());
         holder.mCount.setText(albumDetail.getNumOfSongs() + " Songs");
 
@@ -93,12 +91,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
         public MyMenuItemClickListener() {
-            
+
         }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_add_favourite:
+                    Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.action_play_next:
+                    Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
+                    return true;
+                default:
+            }
+            return false;
+        }
+
     }
+
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return albumDetailList.size();
     }
 }
