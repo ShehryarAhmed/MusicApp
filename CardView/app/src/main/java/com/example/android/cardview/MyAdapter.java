@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.android.cardview.model.AlbumDetail;
+
+import java.util.List;
 /**
  * Created by android on 3/5/2017.
  */
@@ -15,10 +19,11 @@ import android.widget.Toast;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private String[] mDataset;
     private  Context mContext;
+    private List<AlbumDetail> list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
-        public TextView mTextView;
+        public TextView mTitle;
         public ViewHolder(View v) {
             super(v);
             mTextView = (TextView) v.findViewById(R.id.recycler_view);
