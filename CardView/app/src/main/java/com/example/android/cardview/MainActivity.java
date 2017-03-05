@@ -4,28 +4,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+
+import com.example.android.cardview.model.AlbumDetail;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private MyAdapter mAdapter;
+    private List<AlbumDetail> detailList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String[] myDataset = {"hello","pakistan"};
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.collapsing_toolbar);
+        setSupportActionBar(toolbar);
 
-        mRecyclerView.setHasFixedSize(true);
+        initCollapsingToolbar();
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        LinearLayoutManager manager =  new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        mRecyclerView.setLayoutManager(manager);
+        
 
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(this,myDataset);
-        mRecyclerView.setAdapter(mAdapter);
+
+    }
+
+    private void initCollapsingToolbar() {
     }
 }
