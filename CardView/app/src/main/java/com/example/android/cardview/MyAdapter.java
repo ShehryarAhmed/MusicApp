@@ -1,33 +1,48 @@
 package com.example.android.cardview;
 
 import android.content.Context;
+import android.provider.ContactsContract;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.ImageHeaderParser;
+import com.bumptech.glide.load.resource.bitmap.ImageVideoBitmapDecoder;
 import com.example.android.cardview.model.AlbumDetail;
 
 import java.util.List;
+
 /**
  * Created by android on 3/5/2017.
  */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private String[] mDataset;
-    private  Context mContext;
+    private Context mContext;
     private List<AlbumDetail> list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public TextView mTitle;
+        public TextView mCount;
+
+        public ImageView mThumbnail;
+        public ImageView mOverflow;
+
+
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.recycler_view);
-            v.setOnClickListener(this);
+            mTitle = (TextView) v.findViewById(R.id.title);
+            mCount = (TextView) v.findViewById(R.id.count);
+            mThumbnail = (ImageView) v.findViewById(R.id.thumbnail);
+            mOverflow = (ImageView) v.findViewById(R.id.overflow);
         }
 
         @Override
@@ -35,26 +50,51 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Toast.makeText(view.getContext(), "Toasr", Toast.LENGTH_SHORT).show();
         }
     }
-    public MyAdapter(Context context,String[] myDataset) {
+
+    public MyAdapter(Context context, List<AlbumDetail> lists) {
         mContext = context;
-        mDataset = myDataset;
+        list = lists;
     }
 
     @Override
     public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(mContext).inflate(R.layout.my_text_view, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_albumcard, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        v.setFocusable(true);
-        ViewHolder vh = new ViewHolder(v);
 
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
+    public void onBindViewHolder(final MyAdapter.ViewHolder holder, int position) {
 
+        AlbumDetail albumDetail = list.get(position);
+        holder.mTitle.setText(albumDetail.getName());
+        holder.mCount.setText(albumDetail.getNumOfSongs() + " Songs");
+
+        Glide.with(mContext).load(albumDetail.getThumbnail()).into(holder.mThumbnail);
+        holder.mOverflow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopMenu(holder.mOverflow);
+            }
+        });
+    }
+
+    private void showPopMenu(View view) {
+        PopupMenu popup = new PopupMenu(mContext, view);
+
+        MenuInflater inflater = popup.getMenuInflater();
+
+        inflater.inflate(R.menu.menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+        popup.show();
+    }
+    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
+        public MyMenuItemClickListener() {
+            
+        }
     }
 
     @Override
